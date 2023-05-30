@@ -20,7 +20,7 @@ const seedDB = async() => {
         const location = new Foodloc({
             title: `${title[random75]}`,
             location: `${cities[random75].city}`,
-            image: 'https://unsplash.com/collections/483251/in-the-woods',
+            image: 'https://images.unsplash.com/flagged/photo-1562503542-2a1e6f03b16b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDE0fHx8ZW58MHx8fHx8&w=1000&q=80',
             description: `${sample(descriptors)}`
         })
         await location.save();
