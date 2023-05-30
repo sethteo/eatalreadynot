@@ -1,6 +1,8 @@
 <% layout('layouts/boilerplate')%>
     <h1><%= location.title %></h1>
     <h2><%= location.location %></h2>
+    <img src="<%= location.image %>" alt="">
+    <p class="card-text"><%= location.description %></p>
     <p>
         <a href="/locations/<%= location.id%>/edit">Edit</a>
     </p>
