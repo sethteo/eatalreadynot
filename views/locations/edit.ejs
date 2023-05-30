@@ -1,0 +1,14 @@
+<% layout('layouts/boilerplate')%>
+    <h1>Edit Location</h1>
+    <form action="/locations/<%= location._id %>?_method=PUT" method="POST">
+        <div>
+            <label for="title">Title</label>
+            <input type="text" id="title" name="foodlocation[title]" value="<%= location.title %>">
+        </div>
+        <div>
+            <label for="location">Location</label>
+            <input type="text" id="location" name="foodlocation[location]" value="<%= location.location %>">
+        </div>
+        <button>Update location</button>
+    </form>
+    <a href="/locations/<%= location._id %>">Back to location</a>

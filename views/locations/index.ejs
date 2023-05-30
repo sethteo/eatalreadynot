@@ -1,0 +1,11 @@
+
+<% layout('layouts/boilerplate')%>
+    <h1>All my locations</h1>
+    <div>
+        <a href="/locations/new">Add new location</a>
+    </div>
+    <ul>
+        <% for (let foodloc of foodlocs) {%>
+            <li><a href="/locations/<%= foodloc.id %>"><%= foodloc.title %></a></li>
+        <% } %>
+    </ul>
