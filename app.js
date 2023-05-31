@@ -2,8 +2,11 @@ const express = require('express');
 const path = require('path')
 const mongoose = require('mongoose');
 const ejsMate = require('ejs-mate');
-const methodOverride = require('method-override')
-const Foodloc = require('./models/foodloc')
+
+const catchAsync = require('./utils/catchAsync');
+const methodOverride = require('method-override');
+const Foodloc = require('./models/foodloc');
+
 
 
 mongoose.connect('mongodb://127.0.0.1:27017/food-where')
@@ -38,16 +41,16 @@ app.get('/locations/new', (req, res) => {
     res.render('locations/new')
 })  
 
-app.post('/locations', async(req, res) => {
+app.post('/locations', catchAsync(async(req, res, next) => {
     const location = new Foodloc(req.body.foodlocation)
     await location.save();
     res.redirect(`/locations/${location._id}`)
-})
+}))
 
-app.get('/locations/:id', async (req, res) => {
+app.get('/locations/:id', catchAsync(async (req, res) => {
     const location = await Foodloc.findById(req.params.id);
     res.render('locations/show', {location});
-})  
+}))
 
 app.get('/locations/:id/edit', async (req, res) => {
     const location = await Foodloc.findById(req.params.id);
@@ -65,7 +68,9 @@ app.delete('/locations/:id', async(req, res) => {
     res.redirect('/locations')
 })
 
-
+app.use((err, req, res, next) => {
+    res.send("Error");
+})
 
 app.listen(3000, () => {
     console.log('On port 3000')
