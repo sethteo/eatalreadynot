@@ -32,10 +32,10 @@ app.get('/', (req, res) => {
     res.render('home')
 })   
 
-app.get('/locations', async (req, res) => {
+app.get('/locations', catchAsync(async (req, res) => {
     const foodlocs  = await Foodloc.find({});
     res.render('locations/index', {foodlocs})
-})   
+}))
 
 app.get('/locations/new', (req, res) => {
     res.render('locations/new')
@@ -52,21 +52,21 @@ app.get('/locations/:id', catchAsync(async (req, res) => {
     res.render('locations/show', {location});
 }))
 
-app.get('/locations/:id/edit', async (req, res) => {
+app.get('/locations/:id/edit', catchAsync(async (req, res) => {
     const location = await Foodloc.findById(req.params.id);
     res.render('locations/edit', {location});
-})   
+}))
 
-app.put('/locations/:id', async(req, res) => {
+app.put('/locations/:id', catchAsync(async(req, res) => {
     const location = await Foodloc.findByIdAndUpdate(req.params.id, {...req.body.foodlocation});
     res.redirect(`/locations/${location._id}`);
-})
+}))
 
-app.delete('/locations/:id', async(req, res) => {
+app.delete('/locations/:id', catchAsync(async(req, res) => {
     const {id} = req.params;
     await Foodloc.findByIdAndDelete(id);
     res.redirect('/locations')
-})
+}))
 
 app.use((err, req, res, next) => {
     res.send("Error");
