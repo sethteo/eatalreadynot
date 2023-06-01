@@ -8,6 +8,7 @@ const catchAsync = require('./utils/catchAsync');
 const ExpressError = require('./utils/ExpressError');
 const methodOverride = require('method-override');
 const Foodloc = require('./models/foodloc');
+const Review = require('./models/reviews');
 
 
 mongoose.connect('mongodb://127.0.0.1:27017/food-where')
@@ -86,6 +87,16 @@ app.delete('/locations/:id', catchAsync(async(req, res) => {
     const {id} = req.params;
     await Foodloc.findByIdAndDelete(id);
     res.redirect('/locations')
+}))
+
+
+app.post('/locations/:id/reviews', catchAsync(async(req, res) => {
+   const location =  await Foodloc.findById(req.params.id);
+   const review = new Review(req.body.review);
+   location.reviews.push(review);
+   await review.save();
+   await location.save();
+   res.redirect(`/locations/${location._id}`)
 }))
 
 
