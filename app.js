@@ -111,7 +111,12 @@ app.post('/locations/:id/reviews', catchAsync(async(req, res) => {
 }))
 
 
-
+app.delete('/locations/:id/reviews/:reviewId', catchAsync(async(req, res) => {
+    const { id, reviewId } = req.params;
+    await Foodloc.findByIdAndUpdate(id, {$pull: {reviews: reviewId}})
+    await Review.findByIdAndDelete(reviewId);
+    res.redirect(`/locations/${id}`);
+}))
 
 app.all('*', (req, res, next) => {
     next(new ExpressError("Page not found", 404))
