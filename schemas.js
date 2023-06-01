@@ -13,6 +13,6 @@ module.exports.locationSchema = Joi.object({
 module.exports.reviewSchema = Joi.object({
     review: Joi.object ({
       rating: Joi.string().required(),
-      body: Joi.string.required(),  
+      body: Joi.string().required(),  
     }).required()
 })

@@ -77,7 +77,7 @@ app.post('/locations', validateLocation, catchAsync(async(req, res, next) => {
 
 
 app.get('/locations/:id', catchAsync(async (req, res) => {
-    const location = await Foodloc.findById(req.params.id);
+    const location = await Foodloc.findById(req.params.id).populate('reviews');
     res.render('locations/show', {location});
 }))
 
@@ -109,6 +109,8 @@ app.post('/locations/:id/reviews', catchAsync(async(req, res) => {
    await location.save();
    res.redirect(`/locations/${location._id}`)
 }))
+
+
 
 
 app.all('*', (req, res, next) => {
