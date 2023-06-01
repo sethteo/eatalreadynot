@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Review = require('./reviews')
 const Schema = mongoose.Schema;
 
 const FoodLocationSchema = new Schema({
@@ -13,5 +14,15 @@ const FoodLocationSchema = new Schema({
         }
     ]
 });
+
+FoodLocationSchema.post('findOneAndDelete', async function (doc) {
+    if (doc) {
+        await Review.deleteMany({
+            _id: {
+                $in: doc.reviews
+            }
+        })
+    }
+})
 
 module.exports = mongoose.model('Foodloc', FoodLocationSchema);
