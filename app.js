@@ -8,7 +8,7 @@ const methodOverride = require('method-override');
 
 
 const locations = require('./routes/locations');
-const reviews = require('/locations/:id/reviews');
+const reviews = require('./routes/reviews');
 
 mongoose.connect('mongodb://127.0.0.1:27017/food-where')
 
@@ -28,6 +28,7 @@ app.set('views', path.join(__dirname, 'views'));
 
 app.use(express.urlencoded({extended: true}));
 app.use(methodOverride("_method"));
+app.use(express.static(path.join(__dirname, 'public')));
 
 
 app.use("/locations", locations)
