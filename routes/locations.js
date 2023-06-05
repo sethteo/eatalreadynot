@@ -43,12 +43,20 @@ router.post('/', validateLocation, catchAsync(async(req, res, next) => {
 
 router.get('/:id', catchAsync(async (req, res) => {
     const location = await Foodloc.findById(req.params.id).populate('reviews');
+    if (!location) {
+        req.flash('error', 'Cannot find that location');
+        return res.redirect('/locations');
+    }
     res.render('locations/show', {location});
 }))
 
 
 router.get('/:id/edit', catchAsync(async (req, res) => {
     const location = await Foodloc.findById(req.params.id);
+    if (!location) {
+        req.flash('error', 'Cannot find that location');
+        return res.redirect('/locations');
+    }
     res.render('locations/edit', {location});
 }))
 
