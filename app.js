@@ -11,6 +11,8 @@ const Foodloc = require('./models/foodloc');
 const Review = require('./models/reviews');
 
 
+const locations = require('./routes/locations');
+
 mongoose.connect('mongodb://127.0.0.1:27017/food-where')
 
 const db = mongoose.connection;
@@ -30,17 +32,6 @@ app.use(express.urlencoded({extended: true}));
 app.use(methodOverride("_method"));
 
 
-const validateLocation = (req, res, next) => {
-    const { error } = locationSchema.validate(req.body);
-    if (error) {
-        const msg = error.details.map(el => el.message).join(',');
-        throw new ExpressError(msg, 400);
-    } else {
-        next();
-    }
-}
-
-
 const validateReview = (req, res, next) => {
     const { error } = reviewSchema.validate(req.body);
     if (error) {
@@ -51,54 +42,11 @@ const validateReview = (req, res, next) => {
     }
 }
 
+app.use("/locations", locations)
 
 app.get('/', (req, res) => {
     res.render('home')
 })   
-
-
-app.get('/locations', catchAsync(async (req, res) => {
-    const foodlocs  = await Foodloc.find({});
-    res.render('locations/index', {foodlocs})
-}))
-
-
-app.get('/locations/new', (req, res) => {
-    res.render('locations/new')
-})  
-
-
-app.post('/locations', validateLocation, catchAsync(async(req, res, next) => {
-
-    const location = new Foodloc(req.body.foodlocation)
-    await location.save();
-    res.redirect(`/locations/${location._id}`)
-}))
-
-
-app.get('/locations/:id', catchAsync(async (req, res) => {
-    const location = await Foodloc.findById(req.params.id).populate('reviews');
-    res.render('locations/show', {location});
-}))
-
-
-app.get('/locations/:id/edit', catchAsync(async (req, res) => {
-    const location = await Foodloc.findById(req.params.id);
-    res.render('locations/edit', {location});
-}))
-
-
-app.put('/locations/:id', validateLocation, catchAsync(async(req, res) => {
-    const location = await Foodloc.findByIdAndUpdate(req.params.id, {...req.body.foodlocation});
-    res.redirect(`/locations/${location._id}`);
-}))
-
-
-app.delete('/locations/:id', catchAsync(async(req, res) => {
-    const {id} = req.params;
-    await Foodloc.findByIdAndDelete(id);
-    res.redirect('/locations')
-}))
 
 
 app.post('/locations/:id/reviews', catchAsync(async(req, res) => {
