@@ -3,12 +3,16 @@ const path = require('path')
 const mongoose = require('mongoose');
 const ejsMate = require('ejs-mate');
 const session = require('express-session')
+const flash = require('connect-flash');
+
+
 const ExpressError = require('./utils/ExpressError');
 const methodOverride = require('method-override');
 
 
 const locations = require('./routes/locations');
 const reviews = require('./routes/reviews');
+
 
 mongoose.connect('mongodb://127.0.0.1:27017/food-where')
 
@@ -40,8 +44,14 @@ const sessionConfig = {
         maxAge: 1000 * 60 * 60 * 24 * 7,
     }
 }
-app.use(session(sessionConfig))
+app.use(session(sessionConfig));
+app.use(flash());
 
+app.use((req, res, next) => {
+    res.locals.success = req.flash('success');
+    res.locals.error = req.flash('error');
+    next();
+})
 
 app.use("/locations", locations)
 app.use('/locations/:id/reviews', reviews)

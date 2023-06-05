@@ -1,9 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const catchAsync = require('../utils/catchAsync');
-const {locationSchema} = require('../schemas.js');
-const ExpressError = require('../utils/ExpressError');
+
+
 const Foodloc = require('../models/foodloc');
+const {locationSchema} = require('../schemas.js');
+
+const catchAsync = require('../utils/catchAsync');
+const ExpressError = require('../utils/ExpressError');
+
 
 
 
@@ -30,9 +34,9 @@ router.get('/new', (req, res) => {
 
 
 router.post('/', validateLocation, catchAsync(async(req, res, next) => {
-
-    const location = new Foodloc(req.body.foodlocation)
+    const location = new Foodloc(req.body.foodlocation);
     await location.save();
+    req.flash('success', 'Successfully made a new location');
     res.redirect(`/locations/${location._id}`)
 }))
 
@@ -51,6 +55,7 @@ router.get('/:id/edit', catchAsync(async (req, res) => {
 
 router.put('/:id', validateLocation, catchAsync(async(req, res) => {
     const location = await Foodloc.findByIdAndUpdate(req.params.id, {...req.body.foodlocation});
+    req.flash('success', 'Successfully updated the location');
     res.redirect(`/locations/${location._id}`);
 }))
 

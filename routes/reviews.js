@@ -29,6 +29,7 @@ router.post('/', catchAsync(async(req, res) => {
     location.reviews.push(review);
     await review.save();
     await location.save();
+    req.flash('success', 'Created new review');
     res.redirect(`/locations/${location._id}`)
  }))
  
