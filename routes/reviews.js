@@ -38,6 +38,7 @@ router.delete('/:reviewId', catchAsync(async(req, res) => {
      const { id, reviewId } = req.params;
      await Foodloc.findByIdAndUpdate(id, {$pull: {reviews: reviewId}});
      await Review.findByIdAndDelete(reviewId);
+     req.flash('success', 'Successfully deleted review');
      res.redirect(`/locations/${id}`);
 }))
 

@@ -63,6 +63,7 @@ router.put('/:id', validateLocation, catchAsync(async(req, res) => {
 router.delete('/:id', catchAsync(async(req, res) => {
     const {id} = req.params;
     await Foodloc.findByIdAndDelete(id);
+    req.flash('success', 'Successfully deleted location');
     res.redirect('/locations')
 }))
 
