@@ -27,7 +27,13 @@ router.post('/', isLoggedIn, validateLocation, catchAsync(async(req, res, next) 
 
 router.get('/:id', catchAsync(async (req, res) => {
     // populate is used to add the review and author elements just from id
-    const location = await Foodloc.findById(req.params.id).populate('reviews').populate('author');
+    const location = await Foodloc.findById(req.params.id)
+    .populate({
+        path: 'reviews',
+        populate: {
+            path: 'author'
+        }
+    }).populate('author');
     if (!location) {
         req.flash('error', 'Cannot find that location');
         return res.redirect('/locations');
