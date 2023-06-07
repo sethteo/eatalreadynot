@@ -4,11 +4,10 @@ const router = express.Router();
 
 const Foodloc = require('../models/foodloc');
 const {locationSchema} = require('../schemas.js');
+const { isLoggedIn } = require('../middleware');
 
 const catchAsync = require('../utils/catchAsync');
 const ExpressError = require('../utils/ExpressError');
-
-
 
 
 const validateLocation = (req, res, next) => {
@@ -28,12 +27,12 @@ router.get('/', catchAsync(async (req, res) => {
 }))
 
 
-router.get('/new', (req, res) => {
+router.get('/new', isLoggedIn, (req, res) => {
     res.render('locations/new')
-})  
+})
 
 
-router.post('/', validateLocation, catchAsync(async(req, res, next) => {
+router.post('/', isLoggedIn, validateLocation, catchAsync(async(req, res, next) => {
     const location = new Foodloc(req.body.foodlocation);
     await location.save();
     req.flash('success', 'Successfully made a new location');
@@ -51,7 +50,7 @@ router.get('/:id', catchAsync(async (req, res) => {
 }))
 
 
-router.get('/:id/edit', catchAsync(async (req, res) => {
+router.get('/:id/edit', isLoggedIn, catchAsync(async (req, res) => {
     const location = await Foodloc.findById(req.params.id);
     if (!location) {
         req.flash('error', 'Cannot find that location');
@@ -61,14 +60,14 @@ router.get('/:id/edit', catchAsync(async (req, res) => {
 }))
 
 
-router.put('/:id', validateLocation, catchAsync(async(req, res) => {
+router.put('/:id',  isLoggedIn, validateLocation, catchAsync(async(req, res) => {
     const location = await Foodloc.findByIdAndUpdate(req.params.id, {...req.body.foodlocation});
     req.flash('success', 'Successfully updated the location');
     res.redirect(`/locations/${location._id}`);
 }))
 
 
-router.delete('/:id', catchAsync(async(req, res) => {
+router.delete('/:id', isLoggedIn, catchAsync(async(req, res) => {
     const {id} = req.params;
     await Foodloc.findByIdAndDelete(id);
     req.flash('success', 'Successfully deleted location');
