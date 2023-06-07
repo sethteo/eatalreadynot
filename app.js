@@ -4,14 +4,17 @@ const mongoose = require('mongoose');
 const ejsMate = require('ejs-mate');
 const session = require('express-session')
 const flash = require('connect-flash');
-
+const passport = require('passport');
+const LocalStrategy = require('passport-local');
+const User = require('./models/user')
 
 const ExpressError = require('./utils/ExpressError');
 const methodOverride = require('method-override');
 
 
-const locations = require('./routes/locations');
-const reviews = require('./routes/reviews');
+const userRoutes = require('./routes/users');
+const locationRoutes = require('./routes/locations');
+const reviewRoutes = require('./routes/reviews');
 
 
 mongoose.connect('mongodb://127.0.0.1:27017/food-where')
@@ -47,14 +50,28 @@ const sessionConfig = {
 app.use(session(sessionConfig));
 app.use(flash());
 
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 app.use((req, res, next) => {
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error');
     next();
 })
 
-app.use("/locations", locations)
-app.use('/locations/:id/reviews', reviews)
+app.get('/fakeUser', async (req, res) => {
+    const user = new User({email: 'test@gmail.com', username: 'test'});
+    const newUser = await User.register(user, 'testing123');
+    res.send(newUser);
+})
+
+app.use('/', userRoutes)
+app.use("/locations", locationRoutes)
+app.use('/locations/:id/reviews', reviewRoutes)
 
 
 app.all('*', (req, res, next) => {
