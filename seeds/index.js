@@ -18,6 +18,7 @@ const seedDB = async() => {
     for (let i = 0; i < 50; i++) {
         const random75 = Math.floor(Math.random() * 75);
         const location = new Foodloc({
+            author: "6480639753bf2582bcf34d12",
             title: `${title[random75]}`,
             location: `${cities[random75].city}`,
             image: 'https://images.unsplash.com/flagged/photo-1562503542-2a1e6f03b16b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDE0fHx8ZW58MHx8fHx8&w=1000&q=80',
@@ -31,3 +32,6 @@ const seedDB = async() => {
 seedDB().then(() => {
     mongoose.connection.close();
 })
+
+
+"6480639753bf2582bcf34d12"

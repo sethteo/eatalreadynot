@@ -1,24 +1,8 @@
 const express = require('express');
 const router = express.Router();
-
-
 const Foodloc = require('../models/foodloc');
-const {locationSchema} = require('../schemas.js');
-const { isLoggedIn } = require('../middleware');
-
+const { isLoggedIn, validateLocation, isAuthor } = require('../middleware');
 const catchAsync = require('../utils/catchAsync');
-const ExpressError = require('../utils/ExpressError');
-
-
-const validateLocation = (req, res, next) => {
-    const { error } = locationSchema.validate(req.body);
-    if (error) {
-        const msg = error.details.map(el => el.message).join(',');
-        throw new ExpressError(msg, 400);
-    } else {
-        next();
-    }
-}
 
 
 router.get('/', catchAsync(async (req, res) => {
@@ -34,6 +18,7 @@ router.get('/new', isLoggedIn, (req, res) => {
 
 router.post('/', isLoggedIn, validateLocation, catchAsync(async(req, res, next) => {
     const location = new Foodloc(req.body.foodlocation);
+    location.author = req.user._id;
     await location.save();
     req.flash('success', 'Successfully made a new location');
     res.redirect(`/locations/${location._id}`)
@@ -41,7 +26,8 @@ router.post('/', isLoggedIn, validateLocation, catchAsync(async(req, res, next) 
 
 
 router.get('/:id', catchAsync(async (req, res) => {
-    const location = await Foodloc.findById(req.params.id).populate('reviews');
+    // populate is used to add the review and author elements just from id
+    const location = await Foodloc.findById(req.params.id).populate('reviews').populate('author');
     if (!location) {
         req.flash('error', 'Cannot find that location');
         return res.redirect('/locations');
@@ -50,7 +36,7 @@ router.get('/:id', catchAsync(async (req, res) => {
 }))
 
 
-router.get('/:id/edit', isLoggedIn, catchAsync(async (req, res) => {
+router.get('/:id/edit', isLoggedIn, isAuthor, catchAsync(async (req, res) => {
     const location = await Foodloc.findById(req.params.id);
     if (!location) {
         req.flash('error', 'Cannot find that location');
@@ -60,14 +46,15 @@ router.get('/:id/edit', isLoggedIn, catchAsync(async (req, res) => {
 }))
 
 
-router.put('/:id',  isLoggedIn, validateLocation, catchAsync(async(req, res) => {
-    const location = await Foodloc.findByIdAndUpdate(req.params.id, {...req.body.foodlocation});
-    req.flash('success', 'Successfully updated the location');
-    res.redirect(`/locations/${location._id}`);
+router.put('/:id', isLoggedIn, isAuthor, validateLocation, catchAsync(async(req, res) => {
+    const { id } = req.params;	
+    const location = await Foodloc.findByIdAndUpdate(id, { ...req.body.foodlocation });	
+    req.flash('success', 'Successfully updated location!');	
+    res.redirect(`/locations/${location._id}`)
 }))
 
 
-router.delete('/:id', isLoggedIn, catchAsync(async(req, res) => {
+router.delete('/:id', isLoggedIn, isAuthor, catchAsync(async(req, res) => {
     const {id} = req.params;
     await Foodloc.findByIdAndDelete(id);
     req.flash('success', 'Successfully deleted location');
