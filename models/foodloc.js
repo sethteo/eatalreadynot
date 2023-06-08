@@ -4,7 +4,12 @@ const Schema = mongoose.Schema;
 
 const FoodLocationSchema = new Schema({
     title: String,
-    image: String,
+    images: [
+        {
+            url: String,
+            filename: String,
+        }
+    ],
     description: String,
     location: String,
     author: {

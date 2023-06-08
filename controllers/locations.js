@@ -11,6 +11,7 @@ module.exports.renderNewForm = (req, res) => {
 
 module.exports.createLocation = async(req, res, next) => {
     const location = new Foodloc(req.body.foodlocation);
+    location.images = req.files.map(f => ({url:f.path, filename:f.filename}));
     location.author = req.user._id;
     await location.save();
     req.flash('success', 'Successfully made a new location');
