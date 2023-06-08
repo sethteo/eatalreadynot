@@ -1,4 +1,5 @@
 const Foodloc = require('../models/foodloc');
+const {cloudinary} = require('../cloudinary');
 
 module.exports.index = async (req, res) => {
     const foodlocs  = await Foodloc.find({});
@@ -46,6 +47,15 @@ module.exports.renderEditForm = async (req, res) => {
 module.exports.updateLocation = async(req, res) => {
     const { id } = req.params;	
     const location = await Foodloc.findByIdAndUpdate(id, { ...req.body.foodlocation });	
+    const imgs = req.files.map(f => ({ url: f.path, filename: f.filename }));
+    location.images.push(...imgs);
+    await location.save();
+    if (req.body.deleteImages) {
+        for (let filename of req.body.deleteImages) {
+            await cloudinary.uploader.destroy(filename);
+        }
+        await location.updateOne({$pull: {images: {filename: {$in: req.body.deleteImages}}}});
+    }
     req.flash('success', 'Successfully updated location!');	
     res.redirect(`/locations/${location._id}`)
 };
