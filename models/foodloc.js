@@ -2,14 +2,22 @@ const mongoose = require('mongoose');
 const Review = require('./reviews')
 const Schema = mongoose.Schema;
 
+
+const ImageSchema = new Schema(
+    {
+        url: String,
+        filename: String,
+    }
+)
+
+// Not actually stored in DB
+ImageSchema.virtual('thumbnail').get(function() {
+    return this.url.replace('/upload', '/upload/w_200');
+});
+
 const FoodLocationSchema = new Schema({
     title: String,
-    images: [
-        {
-            url: String,
-            filename: String,
-        }
-    ],
+    images: [ImageSchema],
     description: String,
     location: String,
     author: {
