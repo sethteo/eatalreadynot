@@ -4,10 +4,15 @@ const Foodloc = require('../models/foodloc');
 const { isLoggedIn, validateLocation, isAuthor } = require('../middleware');
 const catchAsync = require('../utils/catchAsync');
 const locations = require('../controllers/locations')
+const multer  = require('multer')
+const upload = multer({ dest: 'uploads/' })
 
 router.route('/')
     .get(catchAsync(locations.index))
-    .post(isLoggedIn, validateLocation, catchAsync(locations.createLocation));
+    // .post(isLoggedIn, validateLocation, catchAsync(locations.createLocation))
+    .post(upload.array('locationImage'), (req, res) => {
+        res.send(req.body, req.files);
+    })
 
 
 router.get('/new', isLoggedIn, locations.renderNewForm);
