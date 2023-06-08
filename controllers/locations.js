@@ -1,5 +1,9 @@
 const Foodloc = require('../models/foodloc');
 const {cloudinary} = require('../cloudinary');
+const mbxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding');
+const mapBoxToken = process.env.MAP_TOKEN;
+const geocoder = mbxGeocoding({accessToken: mapBoxToken});
+
 
 module.exports.index = async (req, res) => {
     const foodlocs  = await Foodloc.find({});
@@ -11,7 +15,13 @@ module.exports.renderNewForm = (req, res) => {
 };
 
 module.exports.createLocation = async(req, res, next) => {
+    const geodata = await geocoder.forwardGeocode({
+        query: req.body.foodlocation.location ,
+        limit: 1
+    }).send();
+
     const location = new Foodloc(req.body.foodlocation);
+    location.geometry = geodata.body.features[0].geometry;
     location.images = req.files.map(f => ({url:f.path, filename:f.filename}));
     location.author = req.user._id;
     await location.save();
