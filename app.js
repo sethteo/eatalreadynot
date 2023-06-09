@@ -9,11 +9,9 @@ const ejsMate = require('ejs-mate');
 const session = require('express-session')
 const flash = require('connect-flash');
 const mongoSanitize = require('express-mongo-sanitize');
-
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const User = require('./models/user');
-
 
 
 const ExpressError = require('./utils/ExpressError');
@@ -44,7 +42,6 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.urlencoded({extended: true}));
 app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(mongoSanitize);
 
 
 const sessionConfig = {
