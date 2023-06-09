@@ -11,7 +11,6 @@ const mongoSanitize = require('express-mongo-sanitize');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const User = require('./models/user');
-// const dbUrl = process.env.DB_URL
 const MongoStore = require('connect-mongo');
 const ExpressError = require('./utils/ExpressError');
 const methodOverride = require('method-override');
@@ -19,9 +18,8 @@ const userRoutes = require('./routes/users');
 const locationRoutes = require('./routes/locations');
 const reviewRoutes = require('./routes/reviews');
 
-const dbUrl = 'mongodb://127.0.0.1:27017/food-where';
-mongoose.connect('mongodb://127.0.0.1:27017/food-where')
-// mongoose.connect(dbUrl)
+const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/yelp-camp';
+mongoose.connect(dbUrl)
 
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error:"));
