@@ -33,6 +33,7 @@
 
 <script>
     const maptoken = '<%-process.env.MAP_TOKEN%>';
+    const locations = {features: <%- JSON.stringify(foodlocs) %>};
 </script>
 
 <script src="/javascripts/clusterMap.js"></script>

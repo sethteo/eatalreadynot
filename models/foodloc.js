@@ -15,6 +15,8 @@ ImageSchema.virtual('thumbnail').get(function() {
     return this.url.replace('/upload', '/upload/w_200');
 });
 
+const opts = { toJSON: { virtuals: true } };
+
 const FoodLocationSchema = new Schema({
     title: String,
     images: [ImageSchema],
@@ -41,7 +43,13 @@ const FoodLocationSchema = new Schema({
             ref: 'Review'
         }
     ]
+}, opts);
+
+
+FoodLocationSchema.virtual('properties.popUpMarkup').get(function() {
+    return `<a href="/locations/${this._id}">${this.title}</a>`
 });
+
 
 FoodLocationSchema.post('findOneAndDelete', async function (doc) {
     if (doc) {
