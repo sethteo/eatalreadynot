@@ -2,10 +2,6 @@
 <link rel="stylesheet" href="/stylesheets/stars.css">
     <div class="row">
         <div class="col-6">
-
-        <div id='map' style='width: 400px; height: 300px;'></div>
-
-
           <div id="locationCarousel" class="carousel slide">
             <div class="carousel-inner">
               <% location.images.forEach((img, i) => { %>
@@ -48,6 +44,7 @@
               </div>
         </div>
         <div class="col-6">
+          <div id='map'></div>
           <% if (currentUser) { %>
           <h2>Leave a review</h2>
           <form action="/locations/<%= location.id %>/reviews" method="POST" class="mb-3 validated-form" novalidate>
