@@ -21,6 +21,7 @@ module.exports.createLocation = async(req, res, next) => {
     }).send();
 
     const location = new Foodloc(req.body.foodlocation);
+    // Maybe include error checking
     location.geometry = geodata.body.features[0].geometry;
     location.images = req.files.map(f => ({url:f.path, filename:f.filename}));
     location.author = req.user._id;

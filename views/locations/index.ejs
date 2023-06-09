@@ -1,6 +1,7 @@
 
 <% layout('layouts/boilerplate')%>
-    <h1>All my locations</h1>
+<div id="map" style="width: 100%; height: 500px"></div>
+    <h1>All Food Recommendations</h1>
     <div>
         <a href="/locations/new">Add new location</a>
     </div>
@@ -11,6 +12,8 @@
                 <div class="col-md-4">
                     <% if (foodloc.images.length) { %>
                         <img class="img-fluid" alt="" src="<%= foodloc.images[0].url %>">
+                    <% } else { %>
+                        <img class="img-fluid" alt="source_img" src="https://liftlearning.com/wp-content/uploads/2020/09/default-image.png">
                     <% } %>
                 </div>
                 <div class="col-md-8">
@@ -27,3 +30,9 @@
         </div>
     <% } %>
 
+
+<script>
+    const maptoken = '<%-process.env.MAP_TOKEN%>';
+</script>
+
+<script src="/javascripts/clusterMap.js"></script>
