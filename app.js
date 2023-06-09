@@ -1,7 +1,6 @@
 if (process.env.NODE_ENV !== "production") {
     require('dotenv').config();
 }
-
 const express = require('express');
 const path = require('path')
 const mongoose = require('mongoose');
@@ -12,18 +11,17 @@ const mongoSanitize = require('express-mongo-sanitize');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const User = require('./models/user');
-
-
+// const dbUrl = process.env.DB_URL
+const MongoStore = require('connect-mongo');
 const ExpressError = require('./utils/ExpressError');
 const methodOverride = require('method-override');
-
-
 const userRoutes = require('./routes/users');
 const locationRoutes = require('./routes/locations');
 const reviewRoutes = require('./routes/reviews');
 
-
+const dbUrl = 'mongodb://127.0.0.1:27017/food-where';
 mongoose.connect('mongodb://127.0.0.1:27017/food-where')
+// mongoose.connect(dbUrl)
 
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error:"));
@@ -43,8 +41,16 @@ app.use(express.urlencoded({extended: true}));
 app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, 'public')));
 
+const store = MongoStore.create({
+    mongoUrl: dbUrl,
+    touchAfter: 24 * 60 * 60,
+    crypto: {
+        secret: 'thisshouldbeabettersecret!'
+    }
+});
 
 const sessionConfig = {
+    store: store,
     name: 'session',
     secret: 'secretsecretsecret',
     resave: false,
@@ -56,6 +62,7 @@ const sessionConfig = {
         maxAge: 1000 * 60 * 60 * 24 * 7,
     }
 }
+
 app.use(session(sessionConfig));
 app.use(flash());
 
