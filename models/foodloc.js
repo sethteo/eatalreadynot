@@ -15,9 +15,6 @@ ImageSchema.virtual('thumbnail').get(function() {
     return this.url.replace('/upload', '/upload/w_200,h_200');
 });
 
-ImageSchema.virtual('indexPageImage').get(function() {
-    return this.url.replace('/upload', '/upload/c_fill,h_200');
-});
 
 const opts = { toJSON: { virtuals: true } };
 
