@@ -24,14 +24,12 @@
           
             <div class="card mb-3">
                 <div class="card-body">
-                  <h5 class="card-title"><%= location.title %></h5>
+                  <h5 class="card-title header"><%= location.title %></h5>
                   <p class="card-text"><%= location.description %></p>
                 </div>
                 <ul class="list-group list-group-flush">
                   <li class="list-group-item"><%= location.location %></li>
                   <li class="list-group-item">Submitted by: <%= location.author.username %></li>
-                  <!-- <li class="list-group-item">A second item</li>
-                  <li class="list-group-item">A third item</li> -->
                 </ul>
                 <% if(currentUser && location.author.equals(currentUser._id)) { %>
                 <div class="card-body">
@@ -45,6 +43,11 @@
         </div>
         <div class="col-6">
           <div id='map'></div>
+          <% if (!currentUser) { %>
+            <div>
+              <p class="text-white">You have to be signed in to leave a review</p>
+            </div>
+          <% } %>
           <% if (currentUser) { %>
           <h2>Leave a review</h2>
           <form action="/locations/<%= location.id %>/reviews" method="POST" class="mb-3 validated-form" novalidate>
