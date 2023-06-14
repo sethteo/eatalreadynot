@@ -1,6 +1,6 @@
 # eatalreadynot
 
-<a src="https://www.youtube.com/watch?v=Po_uEgnDDRo">Video Demo</a>
+[Video Demo](https://www.youtube.com/watch?v=Po_uEgnDDRo)
 
 Food recommendation project
 
