@@ -19,3 +19,9 @@ body {
     font-family: 'DM Serif Display', serif;
     font-size: xx-large;
 }
+
+.testImage {
+    border: 1px #ddd;
+    border-radius: 4px;
+    padding: 5px;
+}
