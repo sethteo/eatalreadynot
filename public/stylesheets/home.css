@@ -1,8 +1,8 @@
 @media (max-width: 480px) {
     body {
-        background-image: url(/images/homepagebackground.jpeg);
-        /* background-position: center;
-        text-shadow: 0 0.05rem 0.1rem rgba(0, 0, 0, 0.5); */
+        background-image: url(/images/smallscreenbackground.jpeg);
+        background-position: center;
+        /* text-shadow: 0 0.05rem 0.1rem rgba(0, 0, 0, 0.5); */
     }
 }
 
