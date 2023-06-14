@@ -1,4 +1,7 @@
 # eatalreadynot
+
+<a src="https://www.youtube.com/watch?v=Po_uEgnDDRo">Video Demo</a>
+
 Food recommendation project
 
 ![Screenshot 2023-06-15 at 1 42 46 AM](https://github.com/sethteo/eatalreadynot/assets/119569146/1428bfaf-8c12-4155-a18c-2908ce2bba90)
