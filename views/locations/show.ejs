@@ -1,7 +1,7 @@
 <% layout('layouts/boilerplate')%>
 <link rel="stylesheet" href="/stylesheets/stars.css">
     <div class="row">
-        <div class="col-6">
+        <div class="col-md-6">
           <div id="locationCarousel" class="carousel slide">
             <div class="carousel-inner">
               <% location.images.forEach((img, i) => { %>
@@ -41,7 +41,7 @@
                 <% } %>
               </div>
         </div>
-        <div class="col-6">
+        <div class="col-md-6">
           <div id='map'></div>
           <% if (!currentUser) { %>
             <div style="background-color:#33475b">
