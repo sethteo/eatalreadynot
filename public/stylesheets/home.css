@@ -1,10 +1,20 @@
-body {
-    height: 100vh;
-    background-image: url("/images/homepagebackground.jpeg");
-    background-position: center;
-    /* text-shadow: 0 0.05rem 0.1rem rgba(0, 0, 0, 0.5); */
-    box-shadow: inset 0 0 5rem rgba(0, 0, 0, 0.5);
+@media (max-width: 480px) {
+    body {
+        background-image: url(/images/defaultbackground.png);
+        text-shadow: 0 0.05rem 0.1rem rgba(0, 0, 0, 0.5);
+    }
 }
+
+@media (min-width: 500px) {
+    body {
+        height: 100vh;
+        background-image: url("/images/homepagebackground.jpeg");
+        background-position: center;
+        /* text-shadow: 0 0.05rem 0.1rem rgba(0, 0, 0, 0.5); */
+        box-shadow: inset 0 0 5rem rgba(0, 0, 0, 0.5);
+    }
+}
+
 
 .cover-container {
     max-width: 60vw;
