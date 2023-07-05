@@ -57,9 +57,14 @@ module.exports.renderEditForm = async (req, res) => {
 
 module.exports.updateLocation = async(req, res) => {
     const { id } = req.params;	
+    const geodata = await geocoder.forwardGeocode({
+        query: req.body.foodlocation.location ,
+        limit: 1
+    }).send();
     const location = await Foodloc.findByIdAndUpdate(id, { ...req.body.foodlocation });	
     const imgs = req.files.map(f => ({ url: f.path, filename: f.filename }));
     location.images.push(...imgs);
+    location.geometry = geodata.body.features[0].geometry;
     await location.save();
     if (req.body.deleteImages) {
         for (let filename of req.body.deleteImages) {
